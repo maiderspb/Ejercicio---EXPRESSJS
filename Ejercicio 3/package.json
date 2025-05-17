@@ -1,0 +1,13 @@
+{
+  "name": "ejercicio-3",
+  "version": "1.0.0",
+  "main": "ej3.js",
+  "scripts": {
+    "start": "node ej3.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -1,9 +1,9 @@
 {
   "name": "extra",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "ej3.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node ej3.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

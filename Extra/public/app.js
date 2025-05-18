@@ -6,9 +6,10 @@ const fetchProducts = async () => {
   try {
     const response = await axios.get(API_URL);
     productList.innerHTML = "";
-    response.data.items.forEach(product => {
+    response.data.items.forEach((product) => {
       const li = document.createElement("li");
-      li.className = "list-group-item d-flex justify-content-between align-items-center";
+      li.className =
+        "list-group-item d-flex justify-content-between align-items-center";
       li.innerHTML = `
         <span><strong>${product.nombre}</strong> - $${product.precio}</span>
         <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">Eliminar</button>
@@ -37,7 +38,7 @@ addForm.addEventListener("submit", async (e) => {
     await axios.post(API_URL, { nombre, precio });
     addForm.reset();
     fetchProducts();
-    const tab = new bootstrap.Tab(document.querySelector('#productos-tab'));
+    const tab = new bootstrap.Tab(document.querySelector("#productos-tab"));
     tab.show();
   } catch (error) {
     console.error("Error al añadir:", error);

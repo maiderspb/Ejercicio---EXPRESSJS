@@ -3,7 +3,6 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-
 app.use(express.static("public"));
 
 let products = {
@@ -18,23 +17,25 @@ let products = {
   ],
 };
 
-app.get("/products", (req, res) => {
-  res.json(products);
-});
+app.get("/products", (req, res) => res.json(products));
 
 app.post("/products", (req, res) => {
-  const newProduct = req.body;
-  products.items.push({ id: products.items.length + 1, ...newProduct });
+  const newProduct = { id: products.items.length + 1, ...req.body };
+  products.items.push(newProduct);
   res.json({ message: "Producto agregado", product: newProduct });
+});
+
+app.delete("/products/:id", (req, res) => {
+  const { id } = req.params;
+  products.items = products.items.filter((p) => p.id != id);
+  res.json({ message: `Producto con id ${id} eliminado` });
 });
 
 app.put("/products/:id", (req, res) => {
   const { id } = req.params;
-  const updatedProduct = req.body;
-  const index = products.items.findIndex((prod) => prod.id == id);
-
+  const index = products.items.findIndex((p) => p.id == id);
   if (index !== -1) {
-    products.items[index] = { id: Number(id), ...updatedProduct };
+    products.items[index] = { id: Number(id), ...req.body };
     res.json({
       message: "Producto actualizado",
       product: products.items[index],
@@ -44,28 +45,22 @@ app.put("/products/:id", (req, res) => {
   }
 });
 
-app.delete("/products/:id", (req, res) => {
-  const { id } = req.params;
-  products.items = products.items.filter((prod) => prod.id != id);
-  res.json({ message: `Producto con id ${id} eliminado` });
-});
-
 app.get("/products/filter/:price", (req, res) => {
   const { price } = req.params;
-  const filtered = products.items.filter((prod) => prod.precio == price);
+  const filtered = products.items.filter((p) => p.precio == price);
   res.json(filtered);
 });
 
 app.get("/products/price-range", (req, res) => {
   const filtered = products.items.filter(
-    (prod) => prod.precio >= 50 && prod.precio <= 250
+    (p) => p.precio >= 50 && p.precio <= 250
   );
   res.json(filtered);
 });
 
 app.get("/products/id/:id", (req, res) => {
   const { id } = req.params;
-  const product = products.items.find((prod) => prod.id == id);
+  const product = products.items.find((p) => p.id == id);
   product
     ? res.json(product)
     : res.status(404).json({ message: "Producto no encontrado" });
@@ -74,7 +69,7 @@ app.get("/products/id/:id", (req, res) => {
 app.get("/products/name/:name", (req, res) => {
   const { name } = req.params;
   const product = products.items.find(
-    (prod) => prod.nombre.toLowerCase() === name.toLowerCase()
+    (p) => p.nombre.toLowerCase() === name.toLowerCase()
   );
   product
     ? res.json(product)
